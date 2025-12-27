@@ -1,0 +1,24 @@
+FICHIER ZIP POUR GEMINI PRO
+============================
+
+Nom du fichier: studio-daw-improvements.zip
+Taille: 29 KB
+
+Emplacements:
+1. /home/user/studio-daw/studio-daw-improvements.zip
+2. /root/studio-daw-improvements.zip
+
+Comment l'utiliser:
+1. Télécharger ce fichier ZIP
+2. Ouvrir Google AI Studio (https://aistudio.google.com)
+3. Uploader le ZIP dans votre projet
+4. Dire à Gemini: "Lis INSTRUCTIONS_POUR_GEMINI.md et suis les étapes"
+
+Contenu du ZIP:
+- utils/constants.ts (370 lignes)
+- utils/helpers.ts (450 lignes)
+- types/common.ts (400 lignes)
+- components/ErrorBoundary.tsx (180 lignes)
+- examples/utility-usage-example.ts (400 lignes)
+- Documentation complète
+- Instructions pour Gemini Pro
