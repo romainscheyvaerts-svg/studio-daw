@@ -11,16 +11,16 @@ import ChatAssistant from './components/ChatAssistant';
 import ViewModeSwitcher from './components/ViewModeSwitcher';
 import ContextMenu from './components/ContextMenu';
 import TouchInteractionManager from './components/TouchInteractionManager';
-import GlobalClipMenu from './components/GlobalClipMenu'; 
+import GlobalClipMenu from './components/GlobalClipMenu';
 import TrackCreationBar from './components/TrackCreationBar';
 import AuthScreen from './components/AuthScreen';
 import AutomationEditorView from './components/AutomationEditorView';
 import ShareModal from './components/ShareModal';
 import SaveProjectModal from './components/SaveProjectModal';
 import LoadProjectModal from './components/LoadProjectModal';
-import ExportModal from './components/ExportModal'; 
-import AudioSettingsPanel from './components/AudioSettingsPanel'; 
-import PluginManager from './components/PluginManager'; 
+import ExportModal from './components/ExportModal';
+import AudioSettingsPanel from './components/AudioSettingsPanel';
+import PluginManager from './components/PluginManager';
 import { supabaseManager } from './services/SupabaseManager';
 import { SessionSerializer } from './services/SessionSerializer';
 import { getAIProductionAssistance } from './services/AIService';
@@ -33,7 +33,11 @@ import { audioBufferToWav } from './services/AudioUtils';
 import PianoRoll from './components/PianoRoll';
 import { midiManager } from './services/MidiManager';
 
-const TRACK_COLORS = ['#ff0000', '#00f2ff', '#fbbf24', '#a855f7', '#10b981', '#f97316', '#3b82f6', '#ec4899'];
+// Import centralized utilities
+import { UI_CONFIG, AUDIO_CONFIG, PLUGIN_CONSTANTS } from './utils/constants';
+import { generateId } from './utils/helpers';
+
+const TRACK_COLORS = UI_CONFIG.TRACK_COLORS;
 
 const AVAILABLE_FX_MENU = [
     { id: 'MASTERSYNC', name: 'Master Sync', icon: 'fa-sync-alt' },
@@ -52,17 +56,17 @@ const AVAILABLE_FX_MENU = [
 ];
 
 const createDefaultAutomation = (param: string, color: string): AutomationLane => ({
-  id: `auto-${Date.now()}-${Math.random()}`,
+  id: generateId('auto'),
   parameterName: param, points: [], color: color, isExpanded: false, min: 0, max: 1.5
 });
 
-const createDefaultPlugins = (type: PluginType, mix: number = 0.3, bpm: number = 120, paramsOverride: any = {}): PluginInstance => {
+const createDefaultPlugins = (type: PluginType, mix: number = 0.3, bpm: number = AUDIO_CONFIG.DEFAULT_BPM, paramsOverride: any = {}): PluginInstance => {
   let params: any = { isEnabled: true };
   let name: string = type;
 
-  if (type === 'DELAY') params = { division: '1/4', feedback: 0.4, damping: 5000, mix, pingPong: false, bpm, isEnabled: true };
-  if (type === 'REVERB') params = { decay: 2.5, preDelay: 0.02, damping: 12000, mix, size: 0.7, mode: 'HALL', isEnabled: true };
-  if (type === 'COMPRESSOR') params = { threshold: -18, ratio: 4, knee: 12, attack: 0.003, release: 0.25, makeupGain: 1.0, isEnabled: true };
+  if (type === 'DELAY') params = { ...PLUGIN_CONSTANTS.DELAY_DEFAULTS, mix, bpm, isEnabled: true };
+  if (type === 'REVERB') params = { ...PLUGIN_CONSTANTS.REVERB_DEFAULTS, mix, isEnabled: true };
+  if (type === 'COMPRESSOR') params = { ...PLUGIN_CONSTANTS.COMPRESSOR_DEFAULTS, isEnabled: true };
   if (type === 'AUTOTUNE') params = { speed: 0.1, humanize: 0.2, mix: 1.0, rootKey: 0, scale: 'CHROMATIC', isEnabled: true };
   if (type === 'CHORUS') params = { rate: 1.2, depth: 0.35, spread: 0.5, mix: 0.4, isEnabled: true };
   if (type === 'FLANGER') params = { rate: 0.5, depth: 0.5, feedback: 0.7, manual: 0.3, mix: 0.5, invertPhase: false, isEnabled: true };
@@ -91,13 +95,13 @@ const createDefaultPlugins = (type: PluginType, mix: number = 0.3, bpm: number =
   }
 
   params = { ...params, ...paramsOverride };
-  return { id: `pl-${Date.now()}-${Math.random()}`, name, type, isEnabled: true, params, latency: 0 };
+  return { id: generateId('pl'), name, type, isEnabled: true, params, latency: 0 };
 };
 
 const createInitialSends = (bpm: number): Track[] => [
-  { id: 'send-delay', name: 'SEND 1/4', type: TrackType.SEND, color: '#00f2ff', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: 0.8, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('DELAY', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#00f2ff')], totalLatency: 0 },
-  { id: 'send-verb-short', name: 'VERB PRO', type: TrackType.SEND, color: '#6366f1', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: 0.8, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('REVERB', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#6366f1')], totalLatency: 0 },
-  { id: 'send-verb-long', name: 'HALL SPACE', type: TrackType.SEND, color: '#a855f7', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: 0.8, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('REVERB', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#a855f7')], totalLatency: 0 }
+  { id: 'send-delay', name: 'SEND 1/4', type: TrackType.SEND, color: '#00f2ff', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: AUDIO_CONFIG.DEFAULT_TRACK_VOLUME, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('DELAY', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#00f2ff')], totalLatency: 0 },
+  { id: 'send-verb-short', name: 'VERB PRO', type: TrackType.SEND, color: '#6366f1', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: AUDIO_CONFIG.DEFAULT_TRACK_VOLUME, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('REVERB', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#6366f1')], totalLatency: 0 },
+  { id: 'send-verb-long', name: 'HALL SPACE', type: TrackType.SEND, color: '#a855f7', isMuted: false, isSolo: false, isTrackArmed: false, isFrozen: false, volume: AUDIO_CONFIG.DEFAULT_TRACK_VOLUME, pan: 0, outputTrackId: 'master', sends: [], clips: [], plugins: [createDefaultPlugins('REVERB', 1.0, bpm)], automationLanes: [createDefaultAutomation('volume', '#a855f7')], totalLatency: 0 }
 ];
 
 const createBusVox = (defaultSends: TrackSend[], bpm: number): Track => ({
