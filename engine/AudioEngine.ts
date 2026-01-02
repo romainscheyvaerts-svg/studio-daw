@@ -1,23 +1,11 @@
 
 import { Track, Clip, PluginInstance, TrackType, TrackSend, AutomationLane, PluginParameter, PluginType, MidiNote, DrumPad } from '../types';
-import { ReverbNode } from '../plugins/ReverbPlugin';
-import { SyncDelayNode } from '../plugins/DelayPlugin';
-import { ChorusNode } from '../plugins/ChorusPlugin';
-import { FlangerNode } from '../plugins/FlangerPlugin';
-import { VocalDoublerNode } from '../plugins/DoublerPlugin';
-import { StereoSpreaderNode } from '../plugins/StereoSpreaderPlugin';
-import { AutoTuneNode } from '../plugins/AutoTunePlugin';
-import { CompressorNode } from '../plugins/CompressorPlugin';
-import { DeEsserNode } from '../plugins/DeEsserPlugin';
-import { DenoiserNode } from '../plugins/DenoiserPlugin';
-import { ProEQ12Node } from '../plugins/ProEQ12Plugin';
-import { VocalSaturatorNode } from '../plugins/VocalSaturatorPlugin';
-import { MasterSyncNode } from '../plugins/MasterSyncPlugin';
+// Plugin imports supprimés - À remplacer avec les nouveaux plugins
 import { Synthesizer } from './Synthesizer';
 import { AudioSampler } from './AudioSampler';
 import { DrumSamplerNode } from './DrumSamplerNode';
 import { MelodicSamplerNode } from './MelodicSamplerNode';
-import { DrumRackNode } from './DrumRackNode'; // NEW
+import { DrumRackNode } from './DrumRackNode';
 
 interface TrackDSP {
   input: GainNode;          

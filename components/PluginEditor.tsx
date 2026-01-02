@@ -2,21 +2,9 @@
 import React from 'react';
 import { PluginInstance, Track } from '../types';
 import { audioEngine } from '../engine/AudioEngine';
-import { AutoTuneUI } from '../plugins/AutoTunePlugin';
-import { ProfessionalReverbUI } from '../plugins/ReverbPlugin';
-import { VocalCompressorUI } from '../plugins/CompressorPlugin';
-import { SyncDelayUI } from '../plugins/DelayPlugin';
-import { VocalChorusUI } from '../plugins/ChorusPlugin';
-import { StudioFlangerUI } from '../plugins/FlangerPlugin';
-import { VocalDoublerUI } from '../plugins/DoublerPlugin';
-import { StereoSpreaderUI } from '../plugins/StereoSpreaderPlugin';
-import { VocalDeEsserUI } from '../plugins/DeEsserPlugin';
-import { VocalDenoiserUI } from '../plugins/DenoiserPlugin';
-import { ProEQ12UI } from '../plugins/ProEQ12Plugin';
-import { VocalSaturatorUI } from '../plugins/VocalSaturatorPlugin';
-import { MasterSyncUI } from '../plugins/MasterSyncPlugin';
+// Plugin UI imports supprimés - À remplacer avec les nouveaux plugins
 import VSTPluginWindow from './VSTPluginWindow';
-import SamplerEditor from './SamplerEditor'; 
+import SamplerEditor from './SamplerEditor';
 import DrumSamplerEditor from './DrumSamplerEditor';
 import MelodicSamplerEditor from './MelodicSamplerEditor';
 import DrumRack from './DrumRack';
@@ -102,27 +90,18 @@ const PluginEditor: React.FC<PluginEditorProps> = ({ plugin, trackId, onClose, o
   }
 
   const renderPluginUI = () => {
-    const commonProps = {
-        trackId: trackId,
-        pluginId: plugin.id
-    };
-
-    switch(plugin.type) {
-      case 'AUTOTUNE': return <AutoTuneUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'REVERB': return <ProfessionalReverbUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'COMPRESSOR': return <VocalCompressorUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'DELAY': return <SyncDelayUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'CHORUS': return <VocalChorusUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'FLANGER': return <StudioFlangerUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'DOUBLER': return <VocalDoublerUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'STEREOSPREADER': return <StereoSpreaderUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'DEESSER': return <VocalDeEsserUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'DENOISER': return <VocalDenoiserUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'PROEQ12': return <ProEQ12UI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'VOCALSATURATOR': return <VocalSaturatorUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      case 'MASTERSYNC': return <MasterSyncUI node={nodeInstance} initialParams={plugin.params as any} onParamsChange={onUpdateParams} {...commonProps} />;
-      default: return <div className="p-20 text-white">Plugin UI Not Found</div>;
-    }
+    // Tous les plugins ont été supprimés
+    // À remplacer avec les nouveaux plugins
+    return (
+      <div className="p-20 bg-slate-900 rounded-xl text-center">
+        <i className="fas fa-plug text-6xl text-slate-700 mb-4"></i>
+        <h3 className="text-white text-xl font-bold mb-2">Plugins supprimés</h3>
+        <p className="text-slate-400 text-sm">
+          Les anciens plugins ont été retirés.<br/>
+          Prêt pour de nouveaux FX !
+        </p>
+      </div>
+    );
   };
 
   return (
